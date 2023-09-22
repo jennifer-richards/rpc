@@ -21,11 +21,12 @@ services:
     build:
       context: .
       dockerfile: docker/app.Dockerfile
+    <<: &default
+      image: rpc-app
     command: sleep infinity
     volumes:
       - .:/workspace
-    ports:
-      - "8888:8000"
+      - /workspace/__pycache__
     env_file:
       - secrets.env
     environment:
@@ -36,6 +37,23 @@ services:
       - db
     extra_hosts:
       - "host.docker.internal:host-gateway"
+
+  client:
+    <<: *default
+    command: sleep infinity
+    volumes:
+      - .:/workspace
+
+  nginx:
+    build:
+      context: .
+      dockerfile: docker/nginx.Dockerfile
+    ports:
+      - "8088:8088"
+    depends_on:
+      - app
+      - client
+      - pgadmin
 
   pgadmin:
     image: dpage/pgadmin4:latest

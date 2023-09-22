@@ -13,10 +13,6 @@ RUN bash /tmp/library-scripts/docker-setup.sh "${USERNAME}" "${USER_UID}" "${USE
 
 COPY docker/configs/.tmux.conf /home/dev/.tmux.conf
 
-# Setup nginx
-COPY docker/configs/nginx-proxy.conf /etc/nginx/sites-available/default
-COPY docker/configs/nginx-502.html /var/www/html/502.html
-
 # Copy the startup file
 COPY docker/scripts/app-init.sh /docker-init.sh
 COPY docker/scripts/app-start.sh /docker-start.sh
